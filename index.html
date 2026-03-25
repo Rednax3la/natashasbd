@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- OG / WhatsApp thumbnail tags -->
+  <title>Happy Birthday, Natasha 🥂</title>
+  <meta name="description" content="A little website, because cards are overrated." />
+  <meta property="og:title" content="Happy Birthday, Natasha 🥂" />
+  <meta property="og:description" content="A little website, because cards are overrated." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Happy Birthday, Natasha 🥂" />
+  <meta name="twitter:description" content="A little website, because cards are overrated." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0d0618;
+      --bg2: #110820;
+      --text: #f5f0ff;
+      --text-muted: #9b8fbf;
+      --p1: #9b5fe0;   /* main purple */
+      --p2: #c77dff;   /* light lilac */
+      --p3: #6a0dad;   /* deep violet */
+      --gold: #f0c060;
+      --glow-p: rgba(155,95,224,0.35);
+      --glow-g: rgba(240,192,96,0.25);
+      --glass: rgba(255,255,255,0.045);
+      --glass-b: rgba(200,150,255,0.18);
+      --glass-hi: rgba(255,255,255,0.06);
+      --card-r: 26px;
+      --r-pill: 100px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Outfit',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.7;
+      overflow-x:hidden;
+      min-height:100vh;
+    }
+
+    /* CANVAS */
+    #bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+    .noise {
+      position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.45;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    .container { max-width:720px; margin:0 auto; padding:0 28px; position:relative; z-index:2; }
+
+    /* TILT GLASS CARD SYSTEM */
+    .tgc {
+      --tilt-x:0deg; --tilt-y:0deg; --stretch:1; --glare-x:50%; --glare-y:20%;
+      position:relative;
+      border-radius:var(--card-r);
+      cursor:default;
+      transform:rotateX(var(--tilt-y)) rotateY(var(--tilt-x)) scale(var(--stretch));
+      transition:transform 0.12s ease-out, box-shadow 0.3s;
+      transform-style:preserve-3d;
+      background:var(--glass);
+      backdrop-filter:blur(20px) saturate(180%);
+      -webkit-backdrop-filter:blur(20px) saturate(180%);
+      border:1px solid var(--glass-b);
+      box-shadow:
+        inset 0 0 24px rgba(200,150,255,0.08),
+        0 24px 60px rgba(0,0,0,0.4);
+    }
+    /* glare — pointer-events:none so it never blocks text */
+    .tgc::before {
+      content:""; position:absolute; inset:0; border-radius:var(--card-r);
+      pointer-events:none; z-index:0;
+      background:radial-gradient(ellipse at var(--glare-x) var(--glare-y),
+        rgba(255,255,255,0.22) 0%,
+        rgba(255,255,255,0.05) 35%,
+        transparent 65%);
+      transition:background 0.08s;
+    }
+    /* top-edge shimmer */
+    .tgc::after {
+      content:""; position:absolute; top:0; left:8%; right:8%; height:1px;
+      border-radius:50%; pointer-events:none; z-index:0;
+      background:linear-gradient(90deg,transparent,rgba(200,150,255,0.6),transparent);
+    }
+    .tgc-content { position:relative; z-index:1; }
+
+    /* HEADER */
+    .site-header {
+      padding:28px 0 0;
+      text-align:center;
+      animation:fadeUp 0.8s ease both;
+    }
+    .header-chip {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 16px 6px 10px; border-radius:var(--r-pill);
+      background:var(--glass); border:1px solid var(--glass-b);
+      backdrop-filter:blur(16px);
+      font-size:0.78rem; color:var(--text-muted); font-weight:500;
+      margin-bottom:0;
+      box-shadow:inset 0 1px 0 var(--glass-hi);
+    }
+    .live-dot { width:7px; height:7px; border-radius:50%; background:#a855f7; animation:pulse-dot 2s infinite; box-shadow:0 0 8px #a855f7; }
+
+    /* HERO */
+    .hero {
+      padding:60px 0 48px;
+      text-align:center;
+    }
+    .hero-label {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(0.85rem,2vw,0.95rem);
+      font-style:italic;
+      color:var(--p2);
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      margin-bottom:16px;
+      animation:fadeUp 0.7s ease 0.1s both;
+    }
+    .hero h1 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(3.2rem,9vw,5.5rem);
+      font-weight:700;
+      line-height:1.05;
+      letter-spacing:-0.02em;
+      margin-bottom:14px;
+      animation:fadeUp 0.7s ease 0.2s both;
+    }
+    .hero h1 .name {
+      background:linear-gradient(130deg,var(--p2),var(--gold));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      display:block;
+    }
+    .hero-year {
+      font-family:'Cabinet Grotesk',sans-serif;
+      font-size:0.82rem; font-weight:700; letter-spacing:0.2em;
+      text-transform:uppercase; color:var(--text-muted);
+      animation:fadeUp 0.7s ease 0.3s both;
+    }
+
+    /* MAIN CARD */
+    .card-wrap { margin:0 0 40px; animation:fadeUp 0.8s ease 0.4s both; }
+    .main-card { padding:44px 48px; }
+    @media(max-width:600px){ .main-card { padding:32px 24px; } }
+
+    .letter-body {
+      font-family:'Outfit',sans-serif;
+      font-size:1.05rem;
+      color:rgba(245,240,255,0.9);
+      line-height:1.85;
+      white-space:pre-line;
+    }
+    .letter-body p { margin-bottom:1.4em; }
+    .letter-body p:last-child { margin-bottom:0; }
+
+    /* SIGNATURE */
+    .signature-wrap {
+      margin-top:36px;
+      padding-top:28px;
+      border-top:1px solid rgba(200,150,255,0.15);
+    }
+    .signature-text {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.6rem;
+      font-style:italic;
+      color:var(--p2);
+      display:block;
+      margin-bottom:4px;
+    }
+    .signature-sub {
+      font-size:0.78rem;
+      color:var(--text-muted);
+      letter-spacing:0.08em;
+    }
+
+    /* ACTION BUTTONS */
+    .actions-wrap {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:14px;
+      margin:0 0 60px;
+      animation:fadeUp 0.8s ease 0.55s both;
+    }
+    .action-btn {
+      display:inline-flex; align-items:center; gap:10px;
+      padding:13px 26px; border-radius:var(--r-pill);
+      font-family:'Cabinet Grotesk',sans-serif;
+      font-weight:700; font-size:0.88rem; cursor:pointer;
+      border:none; text-decoration:none;
+      transition:transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      backdrop-filter:blur(16px);
+      position:relative; overflow:hidden;
+    }
+    .action-btn::before {
+      content:""; position:absolute; inset:0;
+      background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,0.18) 0%,transparent 65%);
+      pointer-events:none;
+    }
+    .btn-confetti {
+      background:linear-gradient(135deg,var(--p1),var(--p3));
+      color:#fff;
+      box-shadow:0 6px 28px var(--glow-p);
+    }
+    .btn-confetti:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 10px 36px var(--glow-p); }
+    .btn-chime {
+      background:linear-gradient(135deg,#7c3aed,#9b5fe0);
+      color:#fff;
+      box-shadow:0 6px 24px rgba(124,58,237,0.35);
+    }
+    .btn-chime:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 10px 32px rgba(124,58,237,0.5); }
+    .btn-download {
+      background:linear-gradient(135deg,#a16207,#d97706);
+      color:#fff;
+      box-shadow:0 6px 24px var(--glow-g);
+    }
+    .btn-download:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 10px 32px var(--glow-g); }
+    .btn-icon { font-size:1rem; }
+
+    /* FOOTER */
+    .site-footer {
+      text-align:center;
+      padding:0 0 40px;
+      color:var(--text-muted);
+      font-size:0.78rem;
+      opacity:0.6;
+      animation:fadeUp 0.8s ease 0.7s both;
+    }
+
+    /* CONFETTI CANVAS */
+    #confetti-canvas {
+      position:fixed; inset:0; z-index:9000;
+      pointer-events:none;
+    }
+
+    /* TOAST */
+    .toast {
+      position:fixed; bottom:32px; left:50%; transform:translateX(-50%) translateY(20px);
+      background:rgba(30,15,50,0.92); backdrop-filter:blur(20px);
+      border:1px solid var(--glass-b); border-radius:var(--r-pill);
+      padding:12px 24px; color:var(--text); font-size:0.85rem; font-weight:500;
+      z-index:9001; opacity:0; transition:opacity 0.35s, transform 0.35s;
+      pointer-events:none; white-space:nowrap;
+    }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);} }
+    @keyframes pulse-dot { 0%,100%{opacity:1;}50%{opacity:0.35;} }
+
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:rgba(155,95,224,0.3); border-radius:3px; }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div class="noise"></div>
+  <canvas id="confetti-canvas"></canvas>
+  <div class="toast" id="toast"></div>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="site-header">
+      <div class="header-chip">
+        <span class="live-dot"></span>
+        A website, because a card felt too easy
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <p class="hero-label">Today is a big day for</p>
+      <h1>
+        Happy Birthday,
+        <span class="name">Natasha.</span>
+      </h1>
+      <p class="hero-year">🥂 &nbsp; Cheers to you &nbsp; 🥂</p>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card-wrap">
+      <div class="tgc main-card" id="mainCard" data-tilt>
+        <div class="tgc-content">
+          <div class="letter-body">
+            <p>Hey Natasha</p>
+            <p>I figured it's that time of the year where you're turning a serious age. And since I'm 'very nonchalant', I made a website 💀</p>
+            <p>I hope you had a blast today...got yourself some cocktails to help forget the atrocities our mutual friend, Mr Blueband, has caused you. 😂</p>
+            <p>Now that I think of it, I still have your property in my possession. It's funny we've met about 5 times since I made it na sijai fikiria kuibeba😂. I'll try and remember next time, no promises 😭</p>
+            <p>I hope God helps you navigate this thing we call life and you achieve so much mpaka ujishangae. I look forward to having a classic "wakili, a quick one" call in the future. (Assuming I'm going to afford you)💀</p>
+            <p>For now, I hope uko kadi coz walai if you're not I'm deleting this code😂. That man must go.</p>
+            <p>Happy Birthday.<br>Cheers 🥂</p>
+          </div>
+
+          <div class="signature-wrap">
+            <span class="signature-text">With happiness & laughs</span>
+            <span class="signature-sub">QUICKSITE · Made in minutes, felt in years</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="actions-wrap">
+      <button class="action-btn btn-confetti" onclick="launchConfetti()">
+        <span class="btn-icon">🎉</span> Confetti
+      </button>
+      <button class="action-btn btn-chime" onclick="playChime()">
+        <span class="btn-icon">🔔</span> Chime
+      </button>
+      <button class="action-btn btn-download" onclick="downloadPage()">
+        <span class="btn-icon">💾</span> Download
+      </button>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="site-footer">
+      Made with Care &nbsp;·&nbsp; quicksite.co.ke &nbsp;·&nbsp; 2026
+    </div>
+
+  </div>
+
+  <script>
+  // ── LIVE CANVAS BACKGROUND ──
+  (function(){
+    const canvas=document.getElementById('bg-canvas'),ctx=canvas.getContext('2d');
+    let W,H,particles=[],orbs=[];
+    function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+    function initOrbs(){
+      orbs=[
+        {baseX:W*0.15,baseY:H*0.2,r:420,color:'rgba(120,40,200,',t:0,speed:0.0004},
+        {baseX:W*0.85,baseY:H*0.25,r:360,color:'rgba(180,80,255,',t:Math.PI,speed:0.0006},
+        {baseX:W*0.5,baseY:H*0.85,r:340,color:'rgba(80,0,160,',t:1.8,speed:0.0005},
+        {baseX:W*0.7,baseY:H*0.6,r:260,color:'rgba(200,120,255,',t:0.9,speed:0.0003},
+      ];
+    }
+    function initParticles(){
+      particles=[];
+      const n=Math.min(90,Math.floor(W*H/12000));
+      for(let i=0;i<n;i++) particles.push({
+        x:Math.random()*W,y:Math.random()*H,
+        vx:(Math.random()-0.5)*0.28,vy:(Math.random()-0.5)*0.28,
+        r:Math.random()*1.6+0.4,alpha:Math.random()*0.45+0.1,
+        hue:Math.random()>0.7?'200,150,255':'255,255,255'
+      });
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      orbs.forEach(o=>{
+        o.t+=o.speed;
+        const x=o.baseX+Math.sin(o.t)*110,y=o.baseY+Math.cos(o.t*1.2)*75;
+        const g=ctx.createRadialGradient(x,y,0,x,y,o.r);
+        g.addColorStop(0,o.color+'0.16)');
+        g.addColorStop(0.45,o.color+'0.08)');
+        g.addColorStop(1,o.color+'0)');
+        ctx.beginPath();ctx.arc(x,y,o.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+      });
+      particles.forEach(p=>{
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(${p.hue},${p.alpha})`;ctx.fill();
+      });
+      for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<110){
+          ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle=`rgba(180,120,255,${0.07*(1-d/110)})`;ctx.lineWidth=0.5;ctx.stroke();
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize',()=>{resize();initOrbs();initParticles();});
+    resize();initOrbs();initParticles();draw();
+  })();
+
+  // ── TILT CARD ──
+  (function(){
+    const card=document.getElementById('mainCard');
+    const sens=20;
+    card.addEventListener('mousemove',e=>{
+      const rect=card.getBoundingClientRect();
+      const x=e.clientX-rect.left,y=e.clientY-rect.top;
+      const cx=rect.width/2,cy=rect.height/2;
+      const rx=(cx-x)/sens,ry=(y-cy)/sens;
+      const gx=Math.round((x/rect.width)*100),gy=Math.round((y/rect.height)*100);
+      card.style.setProperty('--tilt-x',`${rx}deg`);
+      card.style.setProperty('--tilt-y',`${ry}deg`);
+      card.style.setProperty('--stretch','1.02');
+      card.style.setProperty('--glare-x',`${gx}%`);
+      card.style.setProperty('--glare-y',`${gy}%`);
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.setProperty('--tilt-x','0deg');
+      card.style.setProperty('--tilt-y','0deg');
+      card.style.setProperty('--stretch','1');
+      card.style.setProperty('--glare-x','50%');
+      card.style.setProperty('--glare-y','20%');
+    });
+  })();
+
+  // ── CONFETTI ──
+  const confCanvas=document.getElementById('confetti-canvas');
+  const confCtx=confCanvas.getContext('2d');
+  let confPieces=[],confRunning=false,confFrame;
+
+  function launchConfetti(){
+    confCanvas.width=window.innerWidth;confCanvas.height=window.innerHeight;
+    confPieces=[];
+    const colors=['#bf3dff','#9b5fe0','#c77dff','#f0c060','#ffffff','#d8b4fe','#a855f7','#e879f9'];
+    for(let i=0;i<220;i++){
+      confPieces.push({
+        x:Math.random()*confCanvas.width,
+        y:confCanvas.height*(-Math.random()),
+        w:Math.random()*10+5,h:Math.random()*14+6,
+        color:colors[Math.floor(Math.random()*colors.length)],
+        r:Math.random()*Math.PI*2,
+        vx:(Math.random()-0.5)*3.5,
+        vy:Math.random()*4+2,
+        vr:(Math.random()-0.5)*0.15,
+        opacity:1
+      });
+    }
+    if(!confRunning){confRunning=true;animateConf();}
+    showToast('🎉 Happy Birthday Natasha!');
+  }
+
+  function animateConf(){
+    confCtx.clearRect(0,0,confCanvas.width,confCanvas.height);
+    let alive=false;
+    confPieces.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+      if(p.y>confCanvas.height+20) p.opacity-=0.05;
+      if(p.opacity>0) alive=true;
+      confCtx.save();
+      confCtx.translate(p.x+p.w/2,p.y+p.h/2);
+      confCtx.rotate(p.r);
+      confCtx.globalAlpha=Math.max(0,p.opacity);
+      confCtx.fillStyle=p.color;
+      confCtx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      confCtx.restore();
+    });
+    if(alive){confFrame=requestAnimationFrame(animateConf);}
+    else{confRunning=false;confCtx.clearRect(0,0,confCanvas.width,confCanvas.height);}
+  }
+
+  // ── CHIME ──
+  function playChime(){
+    try{
+      const ctx=new(window.AudioContext||window.webkitAudioContext)();
+      // Birthday chime — C major ascending arpeggio
+      const notes=[523.25,659.25,783.99,1046.50,783.99,1046.50,1318.51];
+      const times=[0,0.18,0.36,0.54,0.78,0.96,1.14];
+      notes.forEach((freq,i)=>{
+        const osc=ctx.createOscillator();
+        const gain=ctx.createGain();
+        osc.connect(gain);gain.connect(ctx.destination);
+        osc.type='sine';osc.frequency.value=freq;
+        const t=ctx.currentTime+times[i];
+        gain.gain.setValueAtTime(0,t);
+        gain.gain.linearRampToValueAtTime(0.28,t+0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001,t+0.55);
+        osc.start(t);osc.stop(t+0.6);
+      });
+      showToast('🔔 Ding ding ding!');
+    }catch(e){showToast('🔔 (Enable audio to hear the chime)');}
+  }
+
+  // ── DOWNLOAD ──
+  function downloadPage(){
+    const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='happy-birthday-natasha.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('💾 Downloaded!');
+  }
+
+  // ── TOAST ──
+  function showToast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg;t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer=setTimeout(()=>t.classList.remove('show'),2800);
+  }
+  </script>
+</body>
+</html>
